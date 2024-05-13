@@ -747,9 +747,9 @@ SendSSDPNotifies(int s, const char * host, unsigned short http_port,
 	static struct { const char * p1, * p2; } const mcast_addrs[] =
 		{ { LL_SSDP_MCAST_ADDR, "[" LL_SSDP_MCAST_ADDR "]" },	/* Link Local */
 		  { SL_SSDP_MCAST_ADDR, "[" SL_SSDP_MCAST_ADDR "]" },	/* Site Local */
-#ifndef UPNP_STRICT
+#if 0
 		  { GL_SSDP_MCAST_ADDR, "[" GL_SSDP_MCAST_ADDR "]" },	/* Global */
-#endif /* ! UPNP_STRICT */
+#endif
 		  { NULL, NULL } };
 	int j;
 #else /* ENABLE_IPV6 */
@@ -1164,7 +1164,7 @@ ProcessSSDPData(int s, const char *bufr, int n,
 			else if(sender->sa_family == AF_INET6)
 			{
 				/* IPv6 address with brackets */
-#ifdef UPNP_STRICT
+#if 0
 				int index;
 				struct in6_addr addr6;
 				size_t addr6_len = sizeof(addr6);
