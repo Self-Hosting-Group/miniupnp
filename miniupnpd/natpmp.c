@@ -309,7 +309,7 @@ void ProcessIncomingNATPMPPacket(int s, unsigned char *msg_buff, int len,
 					syslog(LOG_DEBUG, "%d %d %hu->'%s':%hu '%s'",
 					       index, proto2, eport2, iaddr2, iport2, desc);
 					if(0 == strcmp(iaddr2, senderaddrstr)
-					  && 0 == memcmp(desc, "NAT-PMP", 7)) {
+					  && 0 == memcmp(desc, "NAT-PMP|", 8)) {
 						/* (iport == 0) => remove all the mappings for this client */
 						if((iport == 0) || ((iport == iport2) && (proto == proto2))) {
 							r = _upnp_delete_redir(eport2, proto2);
@@ -388,8 +388,7 @@ void ProcessIncomingNATPMPPacket(int s, unsigned char *msg_buff, int len,
 					}
 					/* do the redirection */
 					timestamp = upnp_time() + lifetime;
-					snprintf(desc, sizeof(desc), "NAT-PMP %hu %s",
-					         eport, (proto==IPPROTO_TCP)?"tcp":"udp");
+					snprintf(desc, sizeof(desc), "NAT-PMP||");
 					/* TODO : check return code */
 					if(upnp_redirect_internal(NULL, eport, senderaddrstr,
 					                          iport, proto, desc,

@@ -492,6 +492,7 @@ AddPortMapping(struct upnphttp * h, const char * action, const char * ns)
 	ext_port = GetValueFromNameValueList(&data, "NewExternalPort");
 	protocol = GetValueFromNameValueList(&data, "NewProtocol");
 	desc = GetValueFromNameValueList(&data, "NewPortMappingDescription");
+	desc = "UPnP IGD||%s";
 	leaseduration_str = GetValueFromNameValueList(&data, "NewLeaseDuration");
 
 	if (!int_port || !ext_port || !protocol)
@@ -613,6 +614,7 @@ AddAnyPortMapping(struct upnphttp * h, const char * action, const char * ns)
 	int_ip = GetValueFromNameValueList(&data, "NewInternalClient");
 	/* NewEnabled */
 	desc = GetValueFromNameValueList(&data, "NewPortMappingDescription");
+	desc = "UPnP IGD||%s";
 	leaseduration_str = GetValueFromNameValueList(&data, "NewLeaseDuration");
 
 	leaseduration = leaseduration_str ? atoi(leaseduration_str) : 0;
@@ -1813,7 +1815,7 @@ AddPinhole(struct upnphttp * h, const char * action, const char * ns)
 	 * InternalClient and Protocol are the same than an existing pinhole,
 	 * but LeaseTime is different, the device MUST extend the existing
 	 * pinhole's lease time and return the UniqueID of the existing pinhole. */
-	r = upnp_add_inboundpinhole(rem_host, rport, int_ip, iport, proto, "IGD2 pinhole", ltime, &uid);
+	r = upnp_add_inboundpinhole(rem_host, rport, int_ip, iport, proto, "UPnP IGD|uid=%i|", ltime, &uid);
 
 	switch(r)
 	{
