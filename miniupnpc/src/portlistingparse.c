@@ -103,8 +103,8 @@ data(void * d, const char * data, int l)
 	pm = pdata->l_head;
 	if(!pm)
 		return;
-	if(l > 63)
-		l = 63;
+	if(l > 255)
+		l = 255;
 	switch(pdata->curelt)
 	{
 	case NewRemoteHost:
@@ -174,4 +174,3 @@ FreePortListing(struct PortMappingParserData * pdata)
 		free(pm);
 	}
 }
-

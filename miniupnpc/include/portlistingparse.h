@@ -52,7 +52,7 @@ struct PortMapping {
 	unsigned short internalPort;	/*!< \brief internal port */
 	char remoteHost[64];	/*!< \brief empty for wildcard */
 	char internalClient[64];	/*!< \brief internal IP address */
-	char description[64];	/*!< \brief description */
+	char description[256];	/*!< \brief description */
 	char protocol[4];		/*!< \brief `TCP` or `UDP` */
 	unsigned char enabled;	/*!< \brief 0 (false) or 1 (true) */
 };
