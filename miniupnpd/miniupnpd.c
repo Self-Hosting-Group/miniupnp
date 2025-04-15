@@ -1146,6 +1146,7 @@ int update_ext_ip_addr_from_stun(int init)
 	}
 
 	use_ext_ip_addr = ext_addr_str;
+	if (!GETFLAG(ALLOWFILTERDSTUNMASK)) disable_port_forwarding = restrictive_nat;
 	return 0;
 }
 
@@ -1342,6 +1343,11 @@ init(int argc, char * * argv, struct runtime_vars * v)
 			case UPNPEXT_PERFORM_STUN:
 				if(strcmp(ary_options[i].value, "yes") == 0)
 					SETFLAG(PERFORMSTUNMASK);
+				if(strcmp(ary_options[i].value, "allow-filtered") == 0)
+				{
+					SETFLAG(PERFORMSTUNMASK);
+					SETFLAG(ALLOWFILTERDSTUNMASK);
+				}
 				break;
 			case UPNPEXT_STUN_HOST:
 				ext_stun_host = ary_options[i].value;
