@@ -1483,6 +1483,12 @@ init(int argc, char * * argv, struct runtime_vars * v)
 			case UPNPEXT_STUN_PORT:
 				ext_stun_port = atoi(ary_options[i].value);
 				break;
+			case DEFAULT_MIN_PORT:
+				default_min_port = atoi(ary_options[i].value);
+				break;
+			case DEFAULT_MAX_PORT:
+				default_min_port = atoi(ary_options[i].value);
+				break;
 			case UPNPLISTENING_IP:
 				lan_addr = (struct lan_addr_s *) malloc(sizeof(struct lan_addr_s));
 				if (lan_addr == NULL)
@@ -2250,6 +2256,9 @@ init(int argc, char * * argv, struct runtime_vars * v)
 		ext_if_name, upnp_bootid);
 	syslog(LOG_INFO, "More information at https://miniupnp.tuxfamily.org/ or http://miniupnp.free.fr/");
 	syslog(LOG_NOTICE, "Extra logging with log level info (-v) or debug (-v -v)");
+
+	syslog(LOG_INFO, "Option default_min/max_port set to %d/%d, applies to IPv4 with no matching ACL entries and to IPv6 always",
+		default_min_port, default_max_port);
 
 #ifdef USE_SYSTEMD
 	if (systemd_flag) {

@@ -1016,6 +1016,15 @@ static int CreatePCPMap_FW(pcp_info_t *pcp_msg_info)
 	int uid;
 	int r;
 	char desc[64];
+
+	if (!IN6_IS_ADDR_V4MAPPED(pcp_msg_info->mapped_ip) &&
+			(pcp_msg_info->int_port < default_min_port || pcp_msg_info->int_port > default_max_port)) {
+		syslog(LOG_INFO, "Reject IPv6 port map [%s]:%hu/%s lifetime=%d via=PCP reason=default-min/max-port",
+			pcp_msg_info->mapped_str, pcp_msg_info->int_port, proto_itoa(pcp_msg_info->protocol),
+			pcp_msg_info->lifetime);
+		return PCP_ERR_NOT_AUTHORIZED;
+	}
+
 	/* first check if pinhole already exists */
 	uid = upnp_find_inboundpinhole(NULL, 0,
 					pcp_msg_info->mapped_str,
