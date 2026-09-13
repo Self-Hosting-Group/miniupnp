@@ -223,7 +223,7 @@ int reload_from_lease_file(void)
 			syslog(LOG_ERR, "unrecognized data in lease file");
 			continue;
 		}
-		rhost = p;
+		rhost = ++p;
 #endif /* SUPPORT_REMOTEHOST */
 		iaddr = strchr(p, ':');
 		if(!iaddr) {
