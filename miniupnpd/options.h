@@ -29,6 +29,8 @@ enum upnpconfigoptions {
 	UPNPEXT_PERFORM_STUN,		/*!< ext_perform_stun */
 	UPNPEXT_STUN_HOST,		/*!< ext_stun_host */
 	UPNPEXT_STUN_PORT,		/*!< ext_stun_port */
+	DEFAULT_MIN_PORT,		/*!< default_min_port */
+	DEFAULT_MAX_PORT,		/*!< default_max_port */
 	UPNPLISTENING_IP,		/*!< listening_ip */
 #ifdef ENABLE_IPV6
 	UPNPIPV6_LISTENING_IP,		/*!< listening address for IPv6 */
