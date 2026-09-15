@@ -280,10 +280,9 @@ void ProcessIncomingNATPMPPacket(int s, unsigned char *msg_buff, int len,
 			eport = READNU16(req+6);
 			lifetime = READNU32(req+8);
 			proto = (req[1]==1)?IPPROTO_UDP:IPPROTO_TCP;
-			syslog(LOG_INFO, "NAT-PMP port mapping request : "
-			                 "%hu->%s:%hu %s lifetime=%us",
-			                 eport, senderaddrstr, iport,
-			                 (req[1]==1)?"udp":"tcp", lifetime);
+			syslog(LOG_INFO, "%s IPv4 port map %hu:%s:%hu/%s lifetime=%u via=NAT-PMP",
+			                 lifetime ? "Add" : "Delete", eport, senderaddrstr, iport,
+			                 req[1] == 1 ? "UDP" : "TCP", lifetime);
 			/* TODO: accept port mapping if iport ok but eport not ok
 			 * (and set eport correctly) */
 			if(lifetime == 0) {
@@ -340,8 +339,8 @@ void ProcessIncomingNATPMPPacket(int s, unsigned char *msg_buff, int len,
 						eport_first = eport;
 					} else if(eport == eport_first) { /* no eport available */
 						if(any_eport_allowed == 0) { /* all eports rejected by permissions */
-							syslog(LOG_INFO, "No allowed eport for NAT-PMP %hu %s->%s:%hu",
-							       eport, proto_itoa(proto), senderaddrstr, iport);
+							syslog(LOG_INFO, "Reject IPv4 port map %hu:%s:%hu/%s lifetime=%u via=NAT-PMP reason=ACL",
+								eport, senderaddrstr, iport, proto_itoa(proto), lifetime);
 							resp[3] = 2;	/* Not Authorized/Refused */
 						} else { /* at least one eport allowed (but none available) */
 							syslog(LOG_ERR, "Failed to find available eport for NAT-PMP %hu %s->%s:%hu",
@@ -358,7 +357,7 @@ void ProcessIncomingNATPMPPacket(int s, unsigned char *msg_buff, int len,
 					any_eport_allowed = 1;	/* at lease one eport is allowed */
 #ifdef CHECK_PORTINUSE
 					if (port_in_use(ext_if_name, eport, proto, senderaddrstr, iport) > 0) {
-						syslog(LOG_INFO, "port %hu protocol %s already in use",
+						syslog(LOG_INFO, "Reject IPv4 port map %hu:?:?/%s via=NAT-PMP reason=port-in-use",
 						       eport, proto_itoa(proto));
 						eport++;
 						if(eport == 0) eport++; /* skip port zero */
@@ -373,8 +372,8 @@ void ProcessIncomingNATPMPPacket(int s, unsigned char *msg_buff, int len,
 						if(strcmp(senderaddrstr, iaddr_old)==0
 						    && iport==iport_old) {
 							/* redirection already existing */
-							syslog(LOG_INFO, "port %hu %s already redirected to %s:%hu, replacing",
-							       eport, (proto==IPPROTO_TCP)?"tcp":"udp", iaddr_old, iport_old);
+							syslog(LOG_INFO, "Renew IPv4 port map %hu:%s:%hu/%s lifetime=%u via=NAT-PMP",
+								eport, senderaddrstr, iport, proto_itoa(proto), lifetime);
 							/* remove and then add again */
 							if(_upnp_delete_redir(eport, proto) < 0) {
 								syslog(LOG_ERR, "failed to remove port mapping");

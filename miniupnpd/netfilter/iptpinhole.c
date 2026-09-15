@@ -295,14 +295,14 @@ find_pinhole(const char * ifname,
 
 	if(rem_host && (rem_host[0] != '\0')) {
 		if (inet_pton(AF_INET6, rem_host, &saddr) < 1) {
-			syslog(LOG_INFO, "Failed to parse INET6 address \"%s\"", rem_host);
+			syslog(LOG_INFO, "Failed to parse IPv6 address (%s)", rem_host);
 			memset(&saddr, 0, sizeof(struct in6_addr));
 		}
 	} else {
 		memset(&saddr, 0, sizeof(struct in6_addr));
 	}
 	if (inet_pton(AF_INET6, int_client, &daddr) < 1) {
-		syslog(LOG_INFO, "Failed to parse INET6 address \"%s\"", int_client);
+		syslog(LOG_INFO, "Failed to parse IPv6 address (%s)", int_client);
 		memset(&daddr, 0, sizeof(struct in6_addr));
 	}
 	for(p = pinhole_list.lh_first; p != NULL; p = p->entries.le_next) {
@@ -483,7 +483,7 @@ clean_pinhole_list(unsigned int * next_timestamp)
 	while(p != NULL) {
 		if(p->timestamp <= (unsigned int)current_time) {
 			unsigned short uid = p->uid;
-			syslog(LOG_INFO, "removing expired pinhole with uid=%hu", uid);
+			syslog(LOG_INFO, "Expire IPv6 port map [?]:?/? (%hu)", uid);
 			p = p->entries.le_next;
 			if(delete_pinhole(uid) == 0)
 				n++;
