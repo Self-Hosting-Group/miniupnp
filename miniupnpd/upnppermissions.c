@@ -23,6 +23,9 @@
 #include "upnppermissions.h"
 #include "upnputils.h"
 
+uint16_t default_min_port = 1;
+uint16_t default_max_port = 65535;
+
 static int
 isodigit(char c)
 {
@@ -529,8 +532,14 @@ check_upnp_rule_against_permissions(const struct upnpperm * permary,
 			return (permary[i].type == UPNPPERM_ALLOW);
 		}
 	}
-	syslog(LOG_DEBUG, "no permission rule matched : accept by default (n_perms=%d)", n_perms);
-	return 1;	/* Default : accept */
+
+	if (iport < default_min_port || eport < default_min_port || iport > default_max_port || eport > default_max_port) {
+		syslog(LOG_DEBUG, "Reject IPv4 port map %hu:?:%hu/? reason=default-min/max-port", eport, iport);
+		return 0;
+	} else {
+		syslog(LOG_DEBUG, "no permission rule matched : accept by default (n_perms=%d)", n_perms);
+		return 1;	/* Default : accept */
+	}
 }
 
 void
