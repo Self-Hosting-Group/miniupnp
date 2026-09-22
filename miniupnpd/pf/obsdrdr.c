@@ -1302,7 +1302,8 @@ priv_delete_redirect_rule_check_desc(const char * ifname, unsigned short eport,
 		}
 	}
 	if (r == -2)
-		syslog(LOG_INFO, "could not find redirect rule to delete eport=%hu", eport);
+		syslog(LOG_INFO, "Non-existent IPv4 port map to delete %hu:?:?/%s via UPnP IGD",
+			eport, proto == IPPROTO_TCP ? "TCP" : "UDP");
 	release_ticket(dev, tnum);
 	return r;
 }
