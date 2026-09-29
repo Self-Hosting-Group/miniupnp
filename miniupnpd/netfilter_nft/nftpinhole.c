@@ -465,7 +465,7 @@ clean_pinhole_list(unsigned int * next_timestamp)
 		}
 
 		if (ts <= (unsigned int)current_time) {
-			syslog(LOG_INFO, "removing expired pinhole '%s'", p->desc);
+			syslog(LOG_INFO, "Expire IPv6 port map [?]:?/?");
 			r = rule_del_handle(p);
 			nft_send_rule(r, NFT_MSG_DELRULE, RULE_CHAIN_FILTER);
 			n++;
